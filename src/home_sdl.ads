@@ -6,6 +6,8 @@ with Ada.Streams.Stream_IO;
 
 package Home_SDL is
 
+   type Initialize_Result is new Interfaces.C.int;
+
    package Initialize_Flags is
       type Flag_Field is private;
 
@@ -53,6 +55,22 @@ package Home_SDL is
       Everything      : constant Flag_Field := Timer or Audio or Video or Joystick or Haptic or Game_Controller or Events or No_Parachute;
    end Initialize_Flags;
 
+
+   function Initialize (Flags : in Initialize_Flags.Flag_Field) return Initialize_Result with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_Init";
+   -- Use this function to initialize the SDL library.
+   -- This must be called before using most other SDL functions.
+   -- SDL_Init() simply forwards to calling SDL_InitSubSystem().
+   -- Therefore, the two may be used interchangeably.
+   -- Though for readability of your code SDL_InitSubSystem() might be preferred.
+   -- The file I/O and threading subsystems are initialized by default.
+   -- You must specifically initialize other subsystems if you use them in your application.
+   -- Logging works without initialization, too.
+   -- If you want to initialize subsystems separately
+   -- you would call SDL_Init(0) followed by SDL_InitSubSystem() with the desired subsystem flag.
+
    procedure Initialize (Flags : in Initialize_Flags.Flag_Field);
    -- Use this function to initialize the SDL library.
    -- This must be called before using most other SDL functions.
@@ -65,7 +83,10 @@ package Home_SDL is
    -- If you want to initialize subsystems separately
    -- you would call SDL_Init(0) followed by SDL_InitSubSystem() with the desired subsystem flag.
 
-   procedure Quit;
+   procedure Quit with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_Quit";
    -- Use this function to clean up all initialized subsystems.
    -- You should call it upon all exit conditions.
    -- You should call this function even if you have already shutdown each initialized subsystem with SDL_QuitSubSystem().
@@ -75,10 +96,5 @@ package Home_SDL is
    -- then you must use that subsystem's quit function (SDL_VideoQuit()) to shut it down before calling SDL_Quit().
    -- You can use this function with atexit() to ensure that it is run when your application is shutdown,
    -- but it is not wise to do this from a library or other dynamically loaded code.
-
-
-
-
-
 
 end Home_SDL;

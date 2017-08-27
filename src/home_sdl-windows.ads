@@ -16,7 +16,6 @@ package Home_SDL.Windows is
       type Flag_Field is mod 2 ** 32 with Convention => C;
       -- The flags on a window
 
-
       None                : constant Flag_Field;
 
 
@@ -79,7 +78,6 @@ package Home_SDL.Windows is
       Popup_Menu          : constant Flag_Field;
       -- Window should be treated as a popup menu
 
-
    private
 
       None                : constant Flag_Field := 16#0000_0000#;
@@ -104,8 +102,6 @@ package Home_SDL.Windows is
       Tooltip             : constant Flag_Field := 16#0004_0000#;
       Popup_Menu          : constant Flag_Field := 16#0008_0000#;
    end Window_Flags;
-
-
 
    function Create
      (Title : Window_Title;
