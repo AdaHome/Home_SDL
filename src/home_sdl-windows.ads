@@ -11,6 +11,8 @@ package Home_SDL.Windows is
    type Window_Height is new Interfaces.C.int range 1 .. Interfaces.C.int'Last;
    type Window_Title (<>) is private;
 
+   Null_SDL_Window : constant SDL_Window;
+
    package Window_Flags is
 
       type Flag_Field is mod 2 ** 32 with Convention => C;
@@ -125,5 +127,6 @@ private
 
    type Window_Title is new Interfaces.C.char_array;
    type SDL_Window is new System.Address;
+   Null_SDL_Window : constant SDL_Window := SDL_Window (System.Null_Address);
 
 end Home_SDL.Windows;
