@@ -113,5 +113,7 @@ package Home_SDL.Message_Boxes is
      Convention    => C,
      External_Name => "SDL_ShowMessageBox";
 
+   procedure Show (Item : aliased in out SDL_Message_Box_Data; Id : out Interfaces.C.int);
+
 
 end Home_SDL.Message_Boxes;
