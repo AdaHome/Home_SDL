@@ -1,5 +1,6 @@
 with Ada.Text_IO;
 with Ada.Assertions;
+with Home_SDL.Errors;
 
 package body Home_SDL is
 
@@ -8,7 +9,7 @@ package body Home_SDL is
       Result : Initialize_Result;
    begin
       Result := Initialize (Flags);
-      Assert (Result = 0, "SDL_Init failed.");
+      Assert (Result = 0, "SDL_Init failed. " & Errors.Get);
    end Initialize;
 
 end Home_SDL;

@@ -1,3 +1,6 @@
+with Home_SDL.Errors;
+with Ada.Assertions;
+
 package body Home_SDL.Windows is
 
    function SDL_CreateWindow
@@ -33,8 +36,11 @@ package body Home_SDL.Windows is
       Flags : Window_Flags.Flag_Field) return SDL_Window is
       Window : SDL_Window;
       C_Title : constant Window_Title := Window_Title (Interfaces.C.To_C (Title));
+      use Ada.Assertions;
    begin
+      Errors.Clear_Error;
       Window := SDL_CreateWindow (C_Title, X, Y, W, H, Flags);
+      Assert (Window /= Null_SDL_Window, Errors.Get);
       return Window;
    end Create;
 

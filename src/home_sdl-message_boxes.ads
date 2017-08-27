@@ -2,9 +2,7 @@ with Home_SDL.Windows;
 
 package Home_SDL.Message_Boxes is
 
-
    package Box_Flags is
-
       type Flag_Field is mod 2 ** 32 with Convention => C;
 
       Error       : constant Flag_Field;
@@ -15,17 +13,14 @@ package Home_SDL.Message_Boxes is
 
       Information : constant Flag_Field;
       -- informational dialog
-
    private
-
       Error       : constant Flag_Field := 16#0000_0010#;
       Warning     : constant Flag_Field := 16#0000_0020#;
       Information : constant Flag_Field := 16#0000_0040#;
-
    end Box_Flags;
 
-   package Button_Flags is
 
+   package Button_Flags is
       type Flag_Field is mod 2 ** 32 with Convention => C;
 
       None               : constant Flag_Field;
@@ -35,85 +30,88 @@ package Home_SDL.Message_Boxes is
 
       Escapekey_Default  : constant Flag_Field;
       -- Marks the default button when escape is hit
-
    private
-
       None                  : constant Flag_Field := 16#0000_0000#;
       Returnkey_Default     : constant Flag_Field := 16#0000_0001#;
       Escapekey_Default     : constant Flag_Field := 16#0000_0002#;
-
    end Button_Flags;
 
-   type SDL_Message_Box_Button_Data is record
-      Flags : Button_Flags.Flag_Field;
+
+   type Button_Identity is new Interfaces.C.int;
+
+   type Box_Button is record
+      Flags : Button_Flags.Flag_Field with Convention => C;
       --SDL_MessageBoxButtonFlags
 
-      Id : Interfaces.C.int;
+      Identity : Button_Identity;
       --User defined button id (value returned via SDL_ShowMessageBox)
 
       Text : Interfaces.C.Strings.char_array_access;
       -- The UTF-8 button text
    end record;
 
-   type SDL_Message_Box_Button_Data_Array is array (Integer range <>) of SDL_Message_Box_Button_Data;
-   type SDL_Message_Box_Button_Data_Array_Access is access all SDL_Message_Box_Button_Data_Array;
 
-   type SDL_Message_Box_Color is record
+   type Box_Button_Array is array (Integer range <>) of aliased Box_Button;
+   type Box_Button_Array_Access is access all Box_Button_Array;
+
+   type Box_Color is record
       R : Interfaces.Unsigned_8;
       G : Interfaces.Unsigned_8;
       B : Interfaces.Unsigned_8;
-   end record;
+   end record with
+     Pack => True,
+     Convention => C;
 
-   package Box_Colors is
-
-      type Color is (Background, Text, Button_Border, Button_Background, Button_Selected);
-      for Color use
+   package Color_Targets is
+      type Target is (Background, Text, Button_Border, Button_Background, Button_Selected) with Convention => C;
+      for Target use
         (Background => 0,
          Text => 1,
          Button_Border => 2,
          Button_Background => 3,
          Button_Selected => 4);
+   end Color_Targets;
 
-   end Box_Colors;
+   type Box_Color_Array is array (Color_Targets.Target range <>) of aliased Box_Color with Convention => C;
 
-   type SDL_Message_Box_Color_Array is array (Box_Colors.Color) of SDL_Message_Box_Color;
+   type Color_Scheme is record
+      Color_Array : Box_Color_Array (Color_Targets.Target);
+   end record with
+     Pack => True,
+     Convention => C;
 
-   type SDL_MessageBoxColorScheme is record
-      Color_Array : SDL_Message_Box_Color_Array;
-   end record;
-
-   type SDL_MessageBoxColorScheme_Array is array (Integer range <>) of SDL_MessageBoxColorScheme;
-   type SDL_MessageBoxColorScheme_Array_Access is access all SDL_MessageBoxColorScheme_Array;
-
-   type SDL_Message_Box_Data is record
+   type Message_Box is record
       Flags : Box_Flags.Flag_Field;
-      --SDL_MessageBoxFlags
+      -- SDL_MessageBoxFlags
 
       Window : Windows.SDL_Window;
       -- Parent window, can be NULL
 
       Title : Interfaces.C.Strings.char_array_access;
-      --UTF-8 title
+      -- UTF-8 title
 
       Message : Interfaces.C.Strings.char_array_access;
       -- UTF-8 message text
 
       Button_Count : Interfaces.C.int;
+      Button_Array : Box_Button_Array_Access;
 
-      Button_Array : SDL_Message_Box_Button_Data_Array_Access;
-      Color_Scheme_Array : SDL_MessageBoxColorScheme_Array_Access;
+      Scheme : access Color_Scheme;
       --SDL_MessageBoxColorScheme, can be NULL to use system settings
    end record;
 
-   type SDL_Message_Box_Data_Array is array (Integer range <>) of SDL_Message_Box_Data;
-   type SDL_Message_Box_Data_Array_Access is access all SDL_Message_Box_Data_Array;
+   type Show_Result is private;
 
-   function SDL_ShowMessageBox (Item : access SDL_Message_Box_Data; Id : out Interfaces.C.int) return Interfaces.C.int with
+   function Show (Item : access Message_Box; Identity : out Button_Identity) return Show_Result with
      Import        => True,
      Convention    => C,
      External_Name => "SDL_ShowMessageBox";
 
-   procedure Show (Item : aliased in out SDL_Message_Box_Data; Id : out Interfaces.C.int);
+   procedure Show (Item : access Message_Box; Identity : out Button_Identity);
 
+
+private
+
+   type Show_Result is new Interfaces.C.int;
 
 end Home_SDL.Message_Boxes;

@@ -1,15 +1,16 @@
 with Home_SDL.Windows;
+with Home_SDL.Errors;
 with Ada.Assertions;
 
 package body Home_SDL.Message_Boxes is
 
-   procedure Show (Item : aliased in SDL_Message_Box_Data; Id : out Interfaces.C.int) is
+   procedure Show (Item : access Message_Box; Identity : out Button_Identity) is
       use Ada.Assertions;
       use type Interfaces.C.int;
-      R : Interfaces.C.int;
+      Result : Show_Result;
    begin
-      R := SDL_ShowMessageBox (Item'Access, Id);
-      Assert (R = 0, "SDL_ShowMessageBox failed");
+      Result := Show (Item, Identity);
+      Assert (Result = 0, "SDL_ShowMessageBox failed. " & Errors.Get);
    end;
 
 end Home_SDL.Message_Boxes;
