@@ -3,8 +3,8 @@ with Ada.Assertions;
 
 package body Home_SDL is
 
-   procedure Initialize (Flags : in Initialize_Options.Option) is
-      function SDL_Init (Flags : in Initialize_Options.Option) return Interfaces.C.int with
+   procedure Initialize (Flags : in Initialize_Flags.Flag_Field) is
+      function SDL_Init (Flags : in Initialize_Flags.Flag_Field) return Interfaces.C.int with
         Import        => True,
         Convention    => C,
         External_Name => "SDL_Init";
@@ -23,5 +23,10 @@ package body Home_SDL is
    begin
       SDL_Quit;
    end Quit;
+
+
+
+
+
 
 end Home_SDL;

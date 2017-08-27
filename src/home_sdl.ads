@@ -6,54 +6,54 @@ with Ada.Streams.Stream_IO;
 
 package Home_SDL is
 
-   package Initialize_Options is
-      type Option is private;
+   package Initialize_Flags is
+      type Flag_Field is private;
 
-      Empty           : constant Option;
+      Empty           : constant Flag_Field;
       -- No flags.
 
-      Timer           : constant Option;
+      Timer           : constant Flag_Field;
       -- Timer subsystem
 
-      Audio           : constant Option;
+      Audio           : constant Flag_Field;
       -- Audio subsystem
 
-      Video           : constant Option;
+      Video           : constant Flag_Field;
       -- Video subsystem; automatically initializes the events subsystem
 
-      Joystick        : constant Option;
+      Joystick        : constant Flag_Field;
       -- Joystick subsystem; automatically initializes the events subsystem
 
-      Haptic          : constant Option;
+      Haptic          : constant Flag_Field;
       -- Haptic (force feedback) subsystem
 
-      Game_Controller : constant Option;
+      Game_Controller : constant Flag_Field;
       -- Controller subsystem; automatically initializes the joystick subsystem
 
-      Events          : constant Option;
+      Events          : constant Flag_Field;
       -- Events subsystem
 
-      No_Parachute    : constant Option;
+      No_Parachute    : constant Flag_Field;
       -- Compatibility; this flag is ignored
 
-      Everything      : constant Option;
+      Everything      : constant Flag_Field;
       -- All of the above subsystems
 
    private
-      type Option is mod 2 ** 32 with Convention => C;
-      Empty           : constant Option := 16#0000_0000#;
-      Timer           : constant Option := 16#0000_0001#;
-      Audio           : constant Option := 16#0000_0010#;
-      Video           : constant Option := 16#0000_0020#;
-      Joystick        : constant Option := 16#0000_0200#;
-      Haptic          : constant Option := 16#0000_1000#;
-      Game_Controller : constant Option := 16#0000_2000#;
-      Events          : constant Option := 16#0000_4000#;
-      No_Parachute    : constant Option := 16#0010_0000#;
-      Everything      : constant Option := Timer or Audio or Video or Joystick or Haptic or Game_Controller or Events or No_Parachute;
-   end Initialize_Options;
+      type Flag_Field is mod 2 ** 32 with Convention => C;
+      Empty           : constant Flag_Field := 16#0000_0000#;
+      Timer           : constant Flag_Field := 16#0000_0001#;
+      Audio           : constant Flag_Field := 16#0000_0010#;
+      Video           : constant Flag_Field := 16#0000_0020#;
+      Joystick        : constant Flag_Field := 16#0000_0200#;
+      Haptic          : constant Flag_Field := 16#0000_1000#;
+      Game_Controller : constant Flag_Field := 16#0000_2000#;
+      Events          : constant Flag_Field := 16#0000_4000#;
+      No_Parachute    : constant Flag_Field := 16#0010_0000#;
+      Everything      : constant Flag_Field := Timer or Audio or Video or Joystick or Haptic or Game_Controller or Events or No_Parachute;
+   end Initialize_Flags;
 
-   procedure Initialize (Flags : in Initialize_Options.Option);
+   procedure Initialize (Flags : in Initialize_Flags.Flag_Field);
    -- Use this function to initialize the SDL library.
    -- This must be called before using most other SDL functions.
    -- SDL_Init() simply forwards to calling SDL_InitSubSystem().
@@ -75,5 +75,10 @@ package Home_SDL is
    -- then you must use that subsystem's quit function (SDL_VideoQuit()) to shut it down before calling SDL_Quit().
    -- You can use this function with atexit() to ensure that it is run when your application is shutdown,
    -- but it is not wise to do this from a library or other dynamically loaded code.
+
+
+
+
+
 
 end Home_SDL;
