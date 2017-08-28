@@ -1,6 +1,9 @@
 with Home_SDL.Windows;
+with System;
 
 package Home_SDL.Renderers is
+
+   use type Windows.SDL_Window;
 
    type SDL_Renderer is private;
    type Rendering_Driver is new Interfaces.C.int;
@@ -33,13 +36,21 @@ package Home_SDL.Renderers is
       Target_Texture         : constant Flag_Field := 16#0000_0008#;
    end Renderer_Flags;
 
-   function Create
+   function Create_Unsafe
      (Window : Windows.SDL_Window;
       Index : Rendering_Driver;
-      Flags : Renderer_Flags.Flag_Field) return SDL_Renderer with
+      Flags : Renderer_Flags.Flag_Field)
+      return SDL_Renderer with
      Import        => True,
      Convention    => C,
      External_Name => "SDL_CreateRenderer",
+     Pre           => Window /= Windows.Null_SDL_Window;
+
+   function Create
+     (Window : Windows.SDL_Window;
+      Flags : Renderer_Flags.Flag_Field)
+      return SDL_Renderer with
+     Pre           => Window /= Windows.Null_SDL_Window,
      Post          => Create'Result /= Null_Renderer;
 
    procedure Present (Renderer : SDL_Renderer) with
@@ -59,6 +70,32 @@ package Home_SDL.Renderers is
      Convention    => C,
      External_Name => "SDL_DestroyRenderer",
      Pre           => Renderer /= Null_Renderer;
+
+   type Draw_Result is new Interfaces.C.int;
+   type Draw_Element is new Interfaces.C.int;
+
+   function Draw (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Draw_Element) return Draw_Result with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_RenderDrawLine",
+     Pre           => Renderer /= Null_Renderer;
+
+   procedure Draw (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Draw_Element) with
+     Pre => Renderer /= Null_Renderer;
+
+   type Color_8 is new Interfaces.Unsigned_8;
+
+   function Set_Color (Renderer : SDL_Renderer; R, G, B, A : Color_8) return Draw_Result with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_SetRenderDrawColor",
+     Pre           => Renderer /= Null_Renderer;
+   -- Use this function to set the color used for drawing operations (Rect, Line and Clear).
+   -- Returns 0 on success or a negative error code on failure; call SDL_GetError() for more information.
+
+   procedure Set_Color (Renderer : SDL_Renderer; R, G, B, A : Color_8) with
+     Pre => Renderer /= Null_Renderer;
+   -- Use this function to set the color used for drawing operations (Rect, Line and Clear).
 
 private
 

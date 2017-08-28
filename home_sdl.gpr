@@ -8,6 +8,7 @@ library project Home_SDL is
    for Library_Kind use "static";
 
    package Compiler is
+      for Switches ("ada") use ("-gnata", "-gnato", "-fstack-check", "-gnat12", "-gnatwa");
    end Compiler;
 
    package Linker is
@@ -24,6 +25,8 @@ library project Home_SDL is
    package Builder is
       --for Default_Switches ("ada") use ("-s", "-gnatQ");
    end Builder;
+
+
 
 end Home_SDL;
 

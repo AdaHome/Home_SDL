@@ -1,4 +1,3 @@
-with Ada.Text_IO;
 with Ada.Assertions;
 with Home_SDL.Errors;
 

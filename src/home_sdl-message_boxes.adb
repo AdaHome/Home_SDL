@@ -1,4 +1,3 @@
-with Home_SDL.Windows;
 with Home_SDL.Errors;
 with Ada.Assertions;
 

@@ -1,6 +1,5 @@
 with Interfaces.C;
-with Interfaces.C.Strings;
-with Home_SDL.Errors;
+with System;
 
 package Home_SDL.Windows is
 
@@ -79,9 +78,7 @@ package Home_SDL.Windows is
 
       Popup_Menu          : constant Flag_Field;
       -- Window should be treated as a popup menu
-
    private
-
       None                : constant Flag_Field := 16#0000_0000#;
       Fullscreen          : constant Flag_Field := 16#0000_0001#;
       OpenGL              : constant Flag_Field := 16#0000_0002#;
@@ -105,13 +102,16 @@ package Home_SDL.Windows is
       Popup_Menu          : constant Flag_Field := 16#0008_0000#;
    end Window_Flags;
 
-   function Create
+   function Create_Unsafe
      (Title : Window_Title;
       X : Window_Position_X;
       Y : Window_Position_Y;
       W : Window_Width;
       H : Window_Width;
-      Flags : Window_Flags.Flag_Field) return SDL_Window;
+      Flags : Window_Flags.Flag_Field) return SDL_Window with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_CreateWindow";
 
    function Create
      (Title : String;
@@ -119,9 +119,14 @@ package Home_SDL.Windows is
       Y : Window_Position_Y;
       W : Window_Width;
       H : Window_Width;
-      Flags : Window_Flags.Flag_Field) return SDL_Window;
+      Flags : Window_Flags.Flag_Field) return SDL_Window with
+     Post          => Create'Result /= Null_SDL_Window;
 
-   procedure Destroy (Window : SDL_Window);
+   procedure Destroy (Window : SDL_Window) with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_DestroyWindow",
+     Pre           => Window /= Null_SDL_Window;
 
 private
 

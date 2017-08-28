@@ -1,4 +1,5 @@
 with Home_SDL.Windows;
+with Interfaces.C.Strings;
 
 package Home_SDL.Message_Boxes is
 
@@ -40,7 +41,7 @@ package Home_SDL.Message_Boxes is
    type Button_Identity is new Interfaces.C.int;
 
    type Box_Button is record
-      Flags : Button_Flags.Flag_Field with Convention => C;
+      Flags : Button_Flags.Flag_Field;
       --SDL_MessageBoxButtonFlags
 
       Identity : Button_Identity;
@@ -48,7 +49,9 @@ package Home_SDL.Message_Boxes is
 
       Text : Interfaces.C.Strings.char_array_access;
       -- The UTF-8 button text
-   end record;
+   end record with
+     -- Pack => True,
+     Convention => C;
 
 
    type Box_Button_Array is array (Integer range <>) of aliased Box_Button;
@@ -77,7 +80,7 @@ package Home_SDL.Message_Boxes is
    type Color_Scheme is record
       Color_Array : Box_Color_Array (Color_Targets.Target);
    end record with
-     Pack => True,
+     -- Pack => True,
      Convention => C;
 
    type Message_Box is record
@@ -98,7 +101,9 @@ package Home_SDL.Message_Boxes is
 
       Scheme : access Color_Scheme;
       --SDL_MessageBoxColorScheme, can be NULL to use system settings
-   end record;
+   end record with
+     -- Pack => True,
+     Convention => C;
 
    type Show_Result is private;
 

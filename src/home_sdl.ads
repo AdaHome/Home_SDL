@@ -1,8 +1,4 @@
 with Interfaces.C;
-with Interfaces.C.Strings;
-with System;
-with Ada.Streams;
-with Ada.Streams.Stream_IO;
 
 package Home_SDL is
 
@@ -59,7 +55,8 @@ package Home_SDL is
    function Initialize (Flags : in Initialize_Flags.Flag_Field) return Initialize_Result with
      Import        => True,
      Convention    => C,
-     External_Name => "SDL_Init";
+     External_Name => "SDL_Init",
+     Pre => True;
    -- Use this function to initialize the SDL library.
    -- This must be called before using most other SDL functions.
    -- SDL_Init() simply forwards to calling SDL_InitSubSystem().
