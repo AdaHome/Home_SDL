@@ -45,6 +45,7 @@ package Home_SDL.Renderers is
      Convention    => C,
      External_Name => "SDL_CreateRenderer",
      Pre           => Window /= Windows.Null_SDL_Window;
+   -- Use this function to create a 2D rendering context for a window.
 
    function Create
      (Window : Windows.SDL_Window;
@@ -52,6 +53,7 @@ package Home_SDL.Renderers is
       return SDL_Renderer with
      Pre           => Window /= Windows.Null_SDL_Window,
      Post          => Create'Result /= Null_Renderer;
+   -- Use this function to create a 2D rendering context for a window.
 
    procedure Present (Renderer : SDL_Renderer) with
      Import        => True,
