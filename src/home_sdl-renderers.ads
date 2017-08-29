@@ -1,4 +1,6 @@
 with Home_SDL.Windows;
+with Home_SDL.Shapes;
+with Home_SDL.Colors;
 with System;
 
 package Home_SDL.Renderers is
@@ -74,20 +76,28 @@ package Home_SDL.Renderers is
      Pre           => Renderer /= Null_Renderer;
 
    type Draw_Result is new Interfaces.C.int;
-   type Draw_Element is new Interfaces.C.int;
 
-   function Draw (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Draw_Element) return Draw_Result with
+   function Draw_Line (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Shapes.Integer_Element) return Draw_Result with
      Import        => True,
      Convention    => C,
      External_Name => "SDL_RenderDrawLine",
      Pre           => Renderer /= Null_Renderer;
 
-   procedure Draw (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Draw_Element) with
+   procedure Draw_Line (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Shapes.Integer_Element) with
      Pre => Renderer /= Null_Renderer;
 
-   type Color_8 is new Interfaces.Unsigned_8;
+   pragma Warnings (Off);
+   function Draw_Line_Array (Renderer : SDL_Renderer; Data : Shapes.Point_Array; Count : Shapes.Element_Count) return Draw_Result with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_RenderDrawLines",
+     Pre           => Renderer /= Null_Renderer;
+   pragma Warnings (On);
 
-   function Set_Color (Renderer : SDL_Renderer; R, G, B, A : Color_8) return Draw_Result with
+   procedure Draw_Line_Array (Renderer : SDL_Renderer; Data : Shapes.Point_Array; Count : Shapes.Element_Count);
+
+
+   function Set_Color (Renderer : SDL_Renderer; R, G, B, A : Colors.Color_8) return Draw_Result with
      Import        => True,
      Convention    => C,
      External_Name => "SDL_SetRenderDrawColor",
@@ -95,7 +105,7 @@ package Home_SDL.Renderers is
    -- Use this function to set the color used for drawing operations (Rect, Line and Clear).
    -- Returns 0 on success or a negative error code on failure; call SDL_GetError() for more information.
 
-   procedure Set_Color (Renderer : SDL_Renderer; R, G, B, A : Color_8) with
+   procedure Set_Color (Renderer : SDL_Renderer; R, G, B, A : Colors.Color_8) with
      Pre => Renderer /= Null_Renderer;
    -- Use this function to set the color used for drawing operations (Rect, Line and Clear).
 

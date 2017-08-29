@@ -1,11 +1,23 @@
 package body Home_SDL.Plotter is
 
-   procedure Plot (Renderer : Renderers.SDL_Renderer; Data : XY_Array) is
+   procedure Update (Plot : Simple_Plot) is
+   begin
+      null;
+   end Update;
+   pragma Unreferenced (Update);
+
+   procedure Draw (Plot : Simple_Plot; Renderer : Renderers.SDL_Renderer) is
       use Home_SDL.Renderers;
    begin
-      for I in Data'First .. Draw_Element'Pred (Data'Last) loop
-         Draw (Renderer, I, Data (I), Draw_Element'Succ (I), Data (Draw_Element'Succ (I)));
-      end loop;
-   end Plot;
+      Draw_Line_Array (Renderer, Plot.Data, Plot.Data'Length);
+   end Draw;
+
+
+   procedure Append (Plot : in out Simple_Plot; Y : Shapes.Integer_Element) is
+   begin
+      Plot.Data (Plot.To).X := Shapes.Integer_Element (Plot.To);
+      Plot.Data (Plot.To).Y := Y;
+      Plot.To := Shapes.Element_Count'Succ (Plot.To);
+   end;
 
 end Home_SDL.Plotter;

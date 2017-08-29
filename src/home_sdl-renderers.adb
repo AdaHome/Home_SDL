@@ -12,15 +12,23 @@ package body Home_SDL.Renderers is
       return Renderer;
    end;
 
-   procedure Draw (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Draw_Element) is
+   procedure Draw_Line (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Shapes.Integer_Element) is
       use Ada.Assertions;
       Result : Draw_Result;
    begin
-      Result := Draw (Renderer, X1, Y1, X2, Y2);
+      Result := Draw_Line (Renderer, X1, Y1, X2, Y2);
       Assert (Result = 0, "SDL_RenderDrawLine. " & Errors.Get);
-   end Draw;
+   end Draw_Line;
 
-   procedure Set_Color (Renderer : SDL_Renderer; R, G, B, A : Color_8) is
+   procedure Draw_Line_Array (Renderer : SDL_Renderer; Data : Shapes.Point_Array; Count : Shapes.Element_Count) is
+      use Ada.Assertions;
+      Result : Draw_Result;
+   begin
+      Result := Draw_Line_Array (Renderer, Data, Count);
+      Assert (Result = 0, "SDL_RenderDrawLine. " & Errors.Get);
+   end Draw_Line_Array;
+
+   procedure Set_Color (Renderer : SDL_Renderer; R, G, B, A : Colors.Color_8) is
       use Ada.Assertions;
       Result : Draw_Result;
    begin
