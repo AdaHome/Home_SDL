@@ -6,6 +6,7 @@
 # Whitelist
 !.gitignore
 !src
+!src_test
 !*.adb
 !*.ads
 !*.gpr

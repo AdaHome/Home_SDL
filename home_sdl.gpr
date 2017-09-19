@@ -27,6 +27,9 @@ library project Home_SDL is
    end Builder;
 
 
+   package Ide is
+      for Vcs_Kind use "Git";
+   end Ide;
 
 end Home_SDL;
 

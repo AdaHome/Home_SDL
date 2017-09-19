@@ -8,6 +8,7 @@ package Home_SDL.Plotter is
       Data : Shapes.Point_Array (1 .. 1000);
       From : Shapes.Element_Count := 0;
       To : Shapes.Element_Count := 1;
+      Scale_X : Shapes.Integer_Element := 2;
    end record;
 
    procedure Draw (Plot : Simple_Plot; Renderer : Renderers.SDL_Renderer);

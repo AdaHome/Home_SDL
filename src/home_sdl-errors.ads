@@ -1,8 +1,5 @@
 with Interfaces.C;
 with Interfaces.C.Strings;
-with System;
-with Ada.Streams;
-with Ada.Streams.Stream_IO;
 
 package Home_SDL.Errors is
 

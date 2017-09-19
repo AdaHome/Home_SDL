@@ -4,11 +4,24 @@ with System;
 package Home_SDL.Windows is
 
    type SDL_Window is private;
+
    type Window_Position_X is new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
    type Window_Position_Y is new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
-   type Window_Width is new Interfaces.C.int range 1 .. Interfaces.C.int'Last;
-   type Window_Height is new Interfaces.C.int range 1 .. Interfaces.C.int'Last;
+
+   type Window_Position_Special is mod 2 ** 32;
+   for Window_Position_Special'Size use 32;
+
+   Position_Centered : constant Window_Position_Special := 16#2FFF0000#;
+   Position_Undefined : constant Window_Position_Special := 16#1FFF0000#;
+
+
+   type Window_Width is new Interfaces.C.int range 1 .. 16384;
+   type Window_Height is new Interfaces.C.int range 1 .. 16384;
+   -- Window size is actually limited to 16384 x 16384 for all platforms at window creation.
+
    type Window_Title (<>) is private;
+
+
 
    Null_SDL_Window : constant SDL_Window;
 
@@ -107,7 +120,7 @@ package Home_SDL.Windows is
       X : Window_Position_X;
       Y : Window_Position_Y;
       W : Window_Width;
-      H : Window_Width;
+      H : Window_Height;
       Flags : Window_Flags.Flag_Field) return SDL_Window with
      Import        => True,
      Convention    => C,
@@ -118,7 +131,19 @@ package Home_SDL.Windows is
       X : Window_Position_X;
       Y : Window_Position_Y;
       W : Window_Width;
-      H : Window_Width;
+      H : Window_Height;
+      Flags : Window_Flags.Flag_Field) return SDL_Window with
+     Post          => Create'Result /= Null_SDL_Window;
+
+   function Create
+     (Title : String;
+      X : Window_Position_X;
+      Y : Window_Position_Y;
+      W : Window_Width;
+      H : Window_Height;
+      Center_Y : Boolean;
+      Center_X : Boolean;
+      Monitor : Natural;
       Flags : Window_Flags.Flag_Field) return SDL_Window with
      Post          => Create'Result /= Null_SDL_Window;
 
@@ -127,6 +152,19 @@ package Home_SDL.Windows is
      Convention    => C,
      External_Name => "SDL_DestroyWindow",
      Pre           => Window /= Null_SDL_Window;
+
+
+   --int SDL_UpdateWindowSurface(SDL_Window* window)
+   function Update_Surface (Window : SDL_Window) return Integer with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_UpdateWindowSurface",
+     Pre           => Window /= Null_SDL_Window;
+
+   procedure Update_Surface (Window : SDL_Window);
+
+
+
 
 private
 
