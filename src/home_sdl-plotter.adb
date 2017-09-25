@@ -9,6 +9,7 @@ package body Home_SDL.Plotter is
    begin
       for I in R loop
          Result (Data'First + I).X := Plot.Scale_X * Data (Data'First + I).X;
+         Result (Data'First + I).Y := Plot.Scale_Y * Data (Data'First + I).Y;
       end loop;
    end Update;
 

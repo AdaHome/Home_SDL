@@ -5,7 +5,8 @@ package Home_SDL.Plotter is
 
    type Simple_Plot is record
       Rectangle : Geometry.Rectangle_2D;
-      Scale_X : Geometry.Integer_Element := 2;
+      Scale_X : Geometry.Integer_Element := 1;
+      Scale_Y : Geometry.Integer_Element := 1;
    end record;
 
    procedure Draw (Renderer : Renderers.SDL_Renderer; Plot : Simple_Plot);

@@ -49,7 +49,8 @@ begin
       Rectangle : constant Rectangle_2D := (100, 100, 100, 100);
       E : SDL_Event (SDL_FIRSTEVENT);
       Should_Run : Boolean := True;
-      R : constant Point_Array := ((0, 0), (1, 2), (2, 3), (3, 3), (4, 2), (5, 7));
+      R2 : constant Point_Array := ((0, 100), (100, 100));
+      R : constant Point_Array := ((0, 12), (1, 14), (2, 15), (3, 37), (4, 34), (5, 12));
       R1 : Point_Array (R'Range);
       P : Simple_Plot;
    begin
@@ -78,12 +79,14 @@ begin
          Set_Color (Renderer, 0, 0, 0, 255);
          Clear (Renderer);
 
-         Set_Color (Renderer, 0, 255, 0, 255);
-         Draw_Line_Array (Renderer, R1, R1'Length);
-
          Set_Color (Renderer, 0, 0, 255, 255);
          Draw_Rectangle (Renderer, Rectangle);
 
+         Set_Color (Renderer, 0, 255, 0, 255);
+         Draw_Line_Array (Renderer, R1, R1'Length);
+
+         Set_Color (Renderer, 255, 0, 0, 255);
+         Draw_Line_Array (Renderer, R2, R2'Length);
          Present (Renderer);
       end loop;
 
