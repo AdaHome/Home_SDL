@@ -28,7 +28,7 @@ package body Home_SDL.Windows is
       H : Window_Height;
       Center_Y : Boolean;
       Center_X : Boolean;
-      Monitor : Natural;
+      Monitor : Monitor_Index;
       Flags : Window_Flags.Flag_Field) return SDL_Window is
       Window : SDL_Window;
       use Home_SDL.Errors;

@@ -4,7 +4,7 @@ with Home_SDL;
 with Interfaces.C;
 with Home_SDL.Windows;
 with Home_SDL.Renderers;
-with Home_SDL.Shapes;
+with Home_SDL.Geometry;
 with Home_SDL.Drawings;
 with Home_SDL.Events;
 
@@ -33,21 +33,23 @@ begin
    --Update_Surface (Window);
 
    declare
+      use Home_SDL;
       use Home_SDL.Renderers;
-      use Home_SDL.Shapes;
+      use Home_SDL.Geometry;
       use Home_SDL.Drawings;
       use Home_SDL.Events;
       Renderer : SDL_Renderer;
-      Rectangle : constant Rectangle_2D := (0, 0, 100, 100);
-      E : Home_SDL.Events.Event;
+      Rectangle : constant Rectangle_2D := (100, 100, 100, 100);
+      E : SDL_Event (SDL_FIRSTEVENT);
    begin
 
       Renderer := Create (Window, Renderer_Flags.Software);
       loop
          if Home_SDL.Events.Poll (E) = 1 then
-            Put_Line ("Event! : " & E.Kind'Image);
+            Put_Line ("Event! : " & E.Common.Kind'Image);
+            null;
          end if;
-         if E.Kind = Home_SDL.Events.SDL_QUIT then
+         if E.Common.Kind = Events.SDL_QUIT then
             Put_Line ("SDL_QUIT");
             exit;
          end if;
@@ -55,7 +57,7 @@ begin
          Set_Color (Renderer, 0, 0, 0, 255);
          Clear (Renderer);
 
-         Set_Color (Renderer, 255, 255, 255, 255);
+         Set_Color (Renderer, 0, 0, 255, 255);
          Draw_Rectangle (Renderer, Rectangle);
 
          Present (Renderer);

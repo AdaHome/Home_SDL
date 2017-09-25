@@ -11,6 +11,8 @@ package Home_SDL.Windows is
    type Window_Position_Special is mod 2 ** 32;
    for Window_Position_Special'Size use 32;
 
+   type Monitor_Index is new Natural;
+
    Position_Centered : constant Window_Position_Special := 16#2FFF0000#;
    Position_Undefined : constant Window_Position_Special := 16#1FFF0000#;
 
@@ -143,7 +145,7 @@ package Home_SDL.Windows is
       H : Window_Height;
       Center_Y : Boolean;
       Center_X : Boolean;
-      Monitor : Natural;
+      Monitor : Monitor_Index;
       Flags : Window_Flags.Flag_Field) return SDL_Window with
      Post          => Create'Result /= Null_SDL_Window;
 

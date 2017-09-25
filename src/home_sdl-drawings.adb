@@ -3,7 +3,7 @@ with Home_SDL.Errors;
 
 package body Home_SDL.Drawings is
 
-   procedure Draw_Line (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Shapes.Integer_Element) is
+   procedure Draw_Line (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Geometry.Integer_Element) is
       use Ada.Assertions;
       Result : Draw_Result;
    begin
@@ -11,7 +11,7 @@ package body Home_SDL.Drawings is
       Assert (Result = 0, "SDL_RenderDrawLine. " & Errors.Get);
    end Draw_Line;
 
-   procedure Draw_Line_Array (Renderer : SDL_Renderer; Data : Shapes.Point_Array; Count : Shapes.Element_Count) is
+   procedure Draw_Line_Array (Renderer : SDL_Renderer; Data : Geometry.Point_Array; Count : Geometry.Element_Count) is
       use Ada.Assertions;
       Result : Draw_Result;
    begin
@@ -27,7 +27,7 @@ package body Home_SDL.Drawings is
       Assert (Result = 0, "SDL_SetRenderDrawColor. " & Errors.Get);
    end;
 
-   procedure Draw_Rectangle (Renderer : SDL_Renderer; Rectangle : Shapes.Rectangle_2D) is
+   procedure Draw_Rectangle (Renderer : SDL_Renderer; Rectangle : Geometry.Rectangle_2D) is
       use Ada.Assertions;
       Result : Draw_Result;
    begin

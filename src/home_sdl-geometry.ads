@@ -1,4 +1,4 @@
-package Home_SDL.Shapes is
+package Home_SDL.Geometry is
 
    type Integer_Element is new Interfaces.C.int;
    type Element_Count is new Interfaces.C.int;
@@ -21,4 +21,4 @@ package Home_SDL.Shapes is
 
    type Rectangle_Array is array (Element_Count range <>) of aliased Rectangle_2D with Convention => C;
 
-end Home_SDL.Shapes;
+end Home_SDL.Geometry;
