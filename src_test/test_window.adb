@@ -1,7 +1,7 @@
 with Ada.Text_IO;
 with Home_SDL;
 
-with Interfaces.C;
+
 with Home_SDL.Windows;
 with Home_SDL.Renderers;
 with Home_SDL.Geometry;
@@ -10,52 +10,59 @@ with Home_SDL.Events;
 with Home_SDL.Events_Kind;
 
 
-
 procedure Test_Window is
-   use Ada.Text_IO;
-   use Home_SDL.Windows;
-   use type Interfaces.C.char_array;
-   use type Home_SDL.Windows.Window_Flags.Flag_Field;
+
    Window : Home_SDL.Windows.SDL_Window;
+
 begin
 
-   Put_Line ("Initialize SDL");
+
    declare
-      use Home_SDL;
+      use Ada.Text_IO;
       use Home_SDL.Initialize_Flags;
    begin
-      Initialize (Video);
+      Put_Line ("Initialize SDL");
+      Home_SDL.Initialize (Video);
    end;
 
 
-   Put_Line ("Create SDL Window");
-   Window := Create ("Title", 0, 0, 500, 500, True, True, 0, Window_Flags.Shown or Window_Flags.Resizable);
+   declare
+      use Ada.Text_IO;
+      use Home_SDL;
+      use Home_SDL.Windows;
+      use type Home_SDL.Windows.Window_Flags.Flag_Field;
+   begin
+      Put_Line ("Create SDL Window");
+      Window := Create ("Title", 0, 0, 500, 500, True, True, 0, Window_Flags.Shown or Window_Flags.Resizable);
+   end;
 
-   --Put_Line ("Update_Surface");
-   --Update_Surface (Window);
 
    declare
+      use Ada.Text_IO;
       use Home_SDL;
       use Home_SDL.Renderers;
       use Home_SDL.Geometry;
       use Home_SDL.Drawings;
       use Home_SDL.Events;
-      use type Events_Kind.SDL_Event_Kind;
+      use Home_SDL.Events_Kind;
       Renderer : SDL_Renderer;
       Rectangle : constant Rectangle_2D := (100, 100, 100, 100);
-      E : SDL_Event;
+      Event : SDL_Event;
+      Should_Run : Boolean := True;
    begin
-
       Renderer := Create (Window, Renderer_Flags.Software);
-      loop
-         if Home_SDL.Events.Poll (E) = 1 then
-            Put_Line ("Event! : " & E.Common.Kind'Image);
-            null;
-         end if;
-         if E.Common.Kind = Events_Kind.SDL_QUIT then
-            Put_Line ("SDL_QUIT");
-            exit;
-         end if;
+      while Should_Run loop
+         pragma Warnings (Off);
+         while Poll (Event) = 1 loop
+            pragma Warnings (On);
+            case Event.Kind is
+               when SDL_QUIT =>
+                  Put_Line ("SDL_QUIT");
+                  Should_Run := False;
+               when others =>
+                  Put_Line ("Event : " & Event.Kind'Image);
+            end case;
+         end loop;
 
          Set_Color (Renderer, 0, 0, 0, 255);
          Clear (Renderer);
@@ -65,14 +72,18 @@ begin
 
          Present (Renderer);
       end loop;
-
-      --delay 1.0;
       Destroy (Renderer);
    end;
 
-   Destroy (Window);
 
-   Ada.Text_IO.Put_Line ("Quit SDL");
-   Home_SDL.Quit;
+   declare
+      use Ada.Text_IO;
+      use Home_SDL.Windows;
+   begin
+      Destroy (Window);
+      Put_Line ("Quit SDL");
+      Home_SDL.Quit;
+   end;
+
 
 end Test_Window;
