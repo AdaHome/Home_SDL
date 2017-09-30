@@ -7,7 +7,7 @@ with Home_SDL.Drawings;
 
 with Interfaces.C;
 
-procedure Main is
+procedure Test_Message_Box is
    use Home_SDL.Windows;
    use Home_SDL.Message_Boxes;
    use Home_SDL.Renderers;
@@ -80,4 +80,4 @@ begin
    Ada.Text_IO.Put_Line ("Quit SDL");
    Home_SDL.Quit;
 
-end Main;
+end Test_Message_Box;

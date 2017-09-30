@@ -7,9 +7,11 @@ with Home_SDL.Renderers;
 with Home_SDL.Geometry;
 with Home_SDL.Drawings;
 with Home_SDL.Events;
+with Home_SDL.Events_Kind;
 
 
-procedure Main2 is
+
+procedure Test_Window is
    use Ada.Text_IO;
    use Home_SDL.Windows;
    use type Interfaces.C.char_array;
@@ -38,9 +40,10 @@ begin
       use Home_SDL.Geometry;
       use Home_SDL.Drawings;
       use Home_SDL.Events;
+      use type Events_Kind.SDL_Event_Kind;
       Renderer : SDL_Renderer;
       Rectangle : constant Rectangle_2D := (100, 100, 100, 100);
-      E : SDL_Event (SDL_FIRSTEVENT);
+      E : SDL_Event;
    begin
 
       Renderer := Create (Window, Renderer_Flags.Software);
@@ -49,7 +52,7 @@ begin
             Put_Line ("Event! : " & E.Common.Kind'Image);
             null;
          end if;
-         if E.Common.Kind = Events.SDL_QUIT then
+         if E.Common.Kind = Events_Kind.SDL_QUIT then
             Put_Line ("SDL_QUIT");
             exit;
          end if;
@@ -72,4 +75,4 @@ begin
    Ada.Text_IO.Put_Line ("Quit SDL");
    Home_SDL.Quit;
 
-end Main2;
+end Test_Window;

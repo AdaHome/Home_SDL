@@ -35,4 +35,9 @@ package body Home_SDL.Drawings is
       Assert (Result = 0, "SDL_RenderFillRect. " & Errors.Get);
    end;
 
+   procedure Set_Color (Renderer : SDL_Renderer; Color : Colors.Color_RGBA) is
+   begin
+      Set_Color (Renderer, Color.R, Color.G, Color.B, Color.A);
+   end;
+
 end Home_SDL.Drawings;

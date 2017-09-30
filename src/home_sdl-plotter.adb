@@ -14,6 +14,7 @@ package body Home_SDL.Plotter is
    end Update;
 
    procedure Draw (Renderer : Renderers.SDL_Renderer; Plot : Simple_Plot) is
+      pragma Unreferenced (Plot);
    begin
       Home_SDL.Drawings.Draw_Line (Renderer, 50, 100, 50, 0);
       Drawings.Draw_Line (Renderer, 0, 50, 100, 50);

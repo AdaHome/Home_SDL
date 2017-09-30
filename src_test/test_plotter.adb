@@ -8,8 +8,9 @@ with Home_SDL.Geometry;
 with Home_SDL.Drawings;
 with Home_SDL.Events;
 with Home_SDL.Plotter;
+with Home_SDL.Events_Kind;
 
-procedure Main3 is
+procedure Test_Plotter is
    use type Interfaces.C.char_array;
    use type Home_SDL.Windows.Window_Flags.Flag_Field;
    Window : Home_SDL.Windows.SDL_Window;
@@ -45,9 +46,10 @@ begin
       use Home_SDL.Events;
       use Home_SDL.Plotter;
       use Ada.Text_IO;
+      use type Events_Kind.SDL_Event_Kind;
       Renderer : SDL_Renderer;
       Rectangle : constant Rectangle_2D := (100, 100, 100, 100);
-      E : SDL_Event (SDL_FIRSTEVENT);
+      E : SDL_Event;
       Should_Run : Boolean := True;
       R2 : constant Point_Array := ((0, 100), (100, 100));
       R : constant Point_Array := ((0, 12), (1, 14), (2, 15), (3, 37), (4, 34), (5, 12));
@@ -61,15 +63,18 @@ begin
       Renderer := Create (Window, Renderer_Flags.Software);
       while Should_Run loop
 
+         pragma Warnings (Off);
          while Poll (E) = 1 loop
+            pragma Warnings (On);
+
             --Put_Line ("Event! : " & E.Common.Kind'Image);
-            if E.Common.Kind = Events.SDL_QUIT then
+            if E.Common.Kind = Events_Kind.SDL_QUIT then
                Put_Line ("SDL_QUIT");
                Should_Run := False;
                exit;
             end if;
 
-            if E.Common.Kind = Events.SDL_KEYDOWN then
+            if E.Common.Kind = Events_Kind.SDL_KEYDOWN then
                P.Scale_X := P.Scale_X + 1;
                Plotter.Update (P, R, R1);
             end if;
@@ -99,4 +104,4 @@ begin
    Ada.Text_IO.Put_Line ("Quit SDL");
    Home_SDL.Quit;
 
-end Main3;
+end Test_Plotter;
