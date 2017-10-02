@@ -62,4 +62,18 @@ package body Home_SDL.Windows is
       Assert (R = 0, Errors.Get);
    end;
 
+
+   procedure Get_Rectangle
+     (Window : SDL_Window;
+      Rectangle : out Geometry.Rectangle_2D) is
+      W : Windows.Window_Width;
+      H : Windows.Window_Height;
+   begin
+      Get_Size (Window, W, H);
+      Rectangle.X := 0;
+      Rectangle.Y := 0;
+      Rectangle.W := Geometry.Integer_Element (W);
+      Rectangle.H := Geometry.Integer_Element (H);
+   end;
+
 end Home_SDL.Windows;

@@ -22,4 +22,10 @@ package Home_SDL.GUI is
    procedure Update (Element : in out Basic_Element; X : Geometry.Integer_Element; Y : Geometry.Integer_Element);
    procedure Update (Element : in out Basic_Element; Point : Geometry.Point_2D);
 
+   procedure Set_Pos
+     (Element : in out Basic_Element;
+      Outline : Geometry.Rectangle_2D;
+      Point : Geometry.Point_2D;
+      R, C : Geometry.Integer_Element);
+
 end Home_SDL.GUI;

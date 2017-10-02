@@ -1,6 +1,8 @@
 with Interfaces.C;
 with System;
 
+with Home_SDL.Geometry;
+
 package Home_SDL.Windows is
 
    type SDL_Window is private;
@@ -166,7 +168,18 @@ package Home_SDL.Windows is
    procedure Update_Surface (Window : SDL_Window);
 
 
+   procedure Get_Size
+     (Window : SDL_Window;
+      Width : out Window_Width;
+      Height : out Window_Height) with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_GetWindowSize",
+     Pre           => Window /= Null_SDL_Window;
 
+   procedure Get_Rectangle
+     (Window : SDL_Window;
+      Rectangle : out Geometry.Rectangle_2D);
 
 private
 
