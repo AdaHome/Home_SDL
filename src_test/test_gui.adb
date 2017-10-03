@@ -49,30 +49,49 @@ begin
       Windows.Get_Rectangle (Window, R);
 
       for Button of Button_Array loop
-         Button.Background_Color := (100, 100, 100, 255);
-         Button.Background_Color_Hoover := (255, 255, 255, 255);
+         Button.Background.Normal := (100, 100, 100, 255);
+         Button.Background.Hoover := (255, 255, 255, 255);
+         Button.Background.Active := (100, 255, 255, 255);
       end loop;
 
-      GUI.Set_Pos (Button_Array (1), R, (1, 2), 10, 10);
-      GUI.Set_Pos (Button_Array (2), R, (1, 3), 10, 10);
-      GUI.Set_Pos (Button_Array (3), R, (4, 2), 10, 10);
-      GUI.Set_Pos (Button_Array (4), R, (3, 2), 10, 10);
+      Geometry.Generate_Grid (Button_Array (1).Rectangle, R, (1, 2), 10, 10);
+      Geometry.Generate_Grid (Button_Array (2).Rectangle, R, (1, 3), 10, 10);
+      Geometry.Generate_Grid (Button_Array (3).Rectangle, R, (4, 2), 10, 10);
+      Geometry.Generate_Grid (Button_Array (4).Rectangle, R, (3, 2), 10, 10);
 
       Renderer := Create (Window, Renderer_Flags.Software);
       while Should_Run loop
          while Home_SDL.Events.Poll (E) = 1 loop
-            if E.Kind = Events_Kind.SDL_MOUSEMOTION then
-               --Put_Line ("Mouse motion" & E.Mouse1.Position.X'Image & " " & E.Mouse1.Position.Y'Image);
-               --Put_Line ("Mouse motion" & E.Mouse1.Velocity.X'Image & " " & E.Mouse1.Velocity.Y'Image);
-               for Button of Button_Array loop
-                  GUI.Update (Button, E.Mouse.Position);
-               end loop;
-            end if;
-            if E.Kind = Events_Kind.SDL_QUIT then
+
+            case E.Kind is
+
+            when Events_Kind.SDL_QUIT =>
                Put_Line ("SDL_QUIT");
                Should_Run := False;
                exit;
-            end if;
+
+            when Events_Kind.SDL_MOUSEMOTION =>
+               --Put_Line ("Mouse motion" & E.Mouse1.Position.X'Image & " " & E.Mouse1.Position.Y'Image);
+               --Put_Line ("Mouse motion" & E.Mouse1.Velocity.X'Image & " " & E.Mouse1.Velocity.Y'Image);
+               for Button of Button_Array loop
+                  GUI.Update (Button, E.Mouse.Position, 0);
+               end loop;
+
+            when Events_Kind.SDL_MOUSEBUTTONDOWN =>
+               for Button of Button_Array loop
+                  GUI.Update (Button, E.Mouse.Position, 1);
+               end loop;
+
+            when Events_Kind.SDL_MOUSEBUTTONUP =>
+               for Button of Button_Array loop
+                  GUI.Update (Button, E.Mouse.Position, 0);
+               end loop;
+
+            when others =>
+               null;
+
+            end case;
+
          end loop;
 
          for Button of Button_Array loop

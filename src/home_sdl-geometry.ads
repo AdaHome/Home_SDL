@@ -21,9 +21,14 @@ package Home_SDL.Geometry is
 
    type Rectangle_Array is array (Element_Count range <>) of aliased Rectangle_2D with Convention => C;
 
-
-
    function XY_In_Rectangle (X : Integer_Element; Y : Integer_Element; R : Rectangle_2D) return Boolean;
+
    function Point_In_Rectangle (Point : Point_2D; R : Rectangle_2D) return Boolean;
+
+   procedure Generate_Grid
+     (Result : out Rectangle_2D;
+      Outline : Rectangle_2D;
+      Position : Point_2D;
+      R, C : Integer_Element);
 
 end Home_SDL.Geometry;

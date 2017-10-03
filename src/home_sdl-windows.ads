@@ -5,15 +5,20 @@ with Home_SDL.Geometry;
 
 package Home_SDL.Windows is
 
+
    type SDL_Window is private;
+
 
    type Window_Position_X is new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
    type Window_Position_Y is new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
 
+
    type Window_Position_Special is mod 2 ** 32;
    for Window_Position_Special'Size use 32;
 
+
    type Monitor_Index is new Natural;
+
 
    Position_Centered : constant Window_Position_Special := 16#2FFF0000#;
    Position_Undefined : constant Window_Position_Special := 16#1FFF0000#;
@@ -23,11 +28,10 @@ package Home_SDL.Windows is
    type Window_Height is new Interfaces.C.int range 1 .. 16384;
    -- Window size is actually limited to 16384 x 16384 for all platforms at window creation.
 
+
    type Window_Title (<>) is private;
-
-
-
    Null_SDL_Window : constant SDL_Window;
+
 
    package Window_Flags is
 
@@ -119,6 +123,7 @@ package Home_SDL.Windows is
       Popup_Menu          : constant Flag_Field := 16#0008_0000#;
    end Window_Flags;
 
+
    function Create_Unsafe
      (Title : Window_Title;
       X : Window_Position_X;
@@ -130,6 +135,7 @@ package Home_SDL.Windows is
      Convention    => C,
      External_Name => "SDL_CreateWindow";
 
+
    function Create
      (Title : String;
       X : Window_Position_X;
@@ -138,6 +144,7 @@ package Home_SDL.Windows is
       H : Window_Height;
       Flags : Window_Flags.Flag_Field) return SDL_Window with
      Post          => Create'Result /= Null_SDL_Window;
+
 
    function Create
      (Title : String;
@@ -150,6 +157,7 @@ package Home_SDL.Windows is
       Monitor : Monitor_Index;
       Flags : Window_Flags.Flag_Field) return SDL_Window with
      Post          => Create'Result /= Null_SDL_Window;
+
 
    procedure Destroy (Window : SDL_Window) with
      Import        => True,
@@ -165,6 +173,7 @@ package Home_SDL.Windows is
      External_Name => "SDL_UpdateWindowSurface",
      Pre           => Window /= Null_SDL_Window;
 
+
    procedure Update_Surface (Window : SDL_Window);
 
 
@@ -177,14 +186,20 @@ package Home_SDL.Windows is
      External_Name => "SDL_GetWindowSize",
      Pre           => Window /= Null_SDL_Window;
 
+
    procedure Get_Rectangle
      (Window : SDL_Window;
       Rectangle : out Geometry.Rectangle_2D);
 
+
 private
 
+
    type Window_Title is new Interfaces.C.char_array;
+
+
    type SDL_Window is new System.Address;
    Null_SDL_Window : constant SDL_Window := SDL_Window (System.Null_Address);
+
 
 end Home_SDL.Windows;

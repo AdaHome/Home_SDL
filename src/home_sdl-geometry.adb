@@ -14,4 +14,18 @@ package body Home_SDL.Geometry is
       return Point.X in XW and Point.Y in YH;
    end;
 
+   procedure Generate_Grid
+     (Result : out Rectangle_2D;
+      Outline : Rectangle_2D;
+      Position : Point_2D;
+      R, C : Integer_Element) is
+      use type Integer_Element;
+      I : constant Integer_Element := Position.X + Position.Y * R;
+   begin
+      Result.W := Outline.W / C;
+      Result.H := Outline.H / R;
+      Result.X := (Result.W * (I mod C));
+      Result.Y := (Result.H * (I / C));
+   end Generate_Grid;
+
 end Home_SDL.Geometry;

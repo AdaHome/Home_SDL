@@ -8,7 +8,7 @@ package Home_SDL.Events is
 
    use Events_Kind;
 
-   type Union_Select is (Select_Common, Select_SDL_Common, Select_SDL_Mouse, Select_Mouse, Select_Keyboard, Select_Window);
+   type Union_Select is (Select_Common, Select_SDL_Common, Select_SDL_Mouse, Select_Mouse, Select_Mouse_Button, Select_Keyboard, Select_Window);
 
    type SDL_Common_Event is record
       Kind : SDL_Event_Kind;
@@ -26,6 +26,8 @@ package Home_SDL.Events is
             Mouse_SDL : Events_Mouse.SDL_Mouse_Event;
          when Select_Mouse =>
             Mouse : Events_Mouse.Mouse_Event;
+         when Select_Mouse_Button =>
+            Button : Events_Mouse.Mouse_Button_Event;
          when Select_Keyboard =>
             Keyboard : Events_Keyboard.SDL_Keyboard_Event;
          when Select_Window =>

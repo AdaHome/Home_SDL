@@ -1,4 +1,3 @@
-with Home_SDL.Geometry;
 with Home_SDL.Events_Kind;
 with Home_SDL.Times;
 

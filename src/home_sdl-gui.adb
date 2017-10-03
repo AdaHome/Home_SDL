@@ -2,52 +2,36 @@ with Home_SDL.Drawings;
 
 package body Home_SDL.GUI is
 
+
    procedure Render (Renderer : Renderers.SDL_Renderer; Element : Basic_Element) is
    begin
-      if Element.Hoover then
-         Drawings.Set_Color (Renderer, Element.Background_Color_Hoover);
+      if Element.Active then
+         Drawings.Set_Color (Renderer, Element.Background.Active);
+      elsif Element.Hoover then
+         Drawings.Set_Color (Renderer, Element.Background.Hoover);
+      elsif Element.Toggle then
+         Drawings.Set_Color (Renderer, Element.Background.Toggle);
       else
-         Drawings.Set_Color (Renderer, Element.Background_Color);
+         Drawings.Set_Color (Renderer, Element.Background.Normal);
       end if;
       Drawings.Draw_Rectangle (Renderer, Element.Rectangle);
    end Render;
 
 
-   procedure Update (Element : in out Basic_Element; X : Geometry.Integer_Element; Y : Geometry.Integer_Element) is
+   procedure Update (Element : in out Basic_Element; Point : Geometry.Point_2D; B : Integer) is
    begin
-      if Geometry.XY_In_Rectangle (X, Y, Element.Rectangle) then
-         Element.Hoover := True;
+      if Geometry.XY_In_Rectangle (Point.X, Point.Y, Element.Rectangle) then
+         if B = 1 then
+            Element.Active := True;
+         else
+            Element.Hoover := True;
+            Element.Active := False;
+         end if;
       else
          Element.Hoover := False;
+         Element.Active := False;
       end if;
    end;
 
-   procedure Update (Element : in out Basic_Element; Point : Geometry.Point_2D) is
-   begin
-      Update (Element, Point.X, Point.Y);
-   end;
-
-   procedure Generate_Grid
-     (Result : out Geometry.Rectangle_2D;
-      Outline : Geometry.Rectangle_2D;
-      Position : Geometry.Point_2D;
-      R, C : Geometry.Integer_Element) is
-      use type Geometry.Integer_Element;
-      I : constant Geometry.Integer_Element := Position.X + Position.Y * R;
-   begin
-      Result.W := Outline.W / C;
-      Result.H := Outline.H / R;
-      Result.X := (Result.W * (I mod C));
-      Result.Y := (Result.H * (I / C));
-   end Generate_Grid;
-
-   procedure Set_Pos
-     (Element : in out Basic_Element;
-      Outline : Geometry.Rectangle_2D;
-      Point : Geometry.Point_2D;
-      R, C : Geometry.Integer_Element) is
-   begin
-      Generate_Grid (Element.Rectangle, Outline, Point, R, C);
-   end Set_Pos;
 
 end Home_SDL.GUI;
