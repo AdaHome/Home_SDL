@@ -109,6 +109,13 @@ package Home_SDL.Textures is
       Data    : System.Address;
       Pitch   : Pitch8);
 
+
+   procedure Destroy
+     (Renderer : in SDL_Texture) with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_DestroyTexture";
+
 private
 
    type SDL_Texture is new System.Address;

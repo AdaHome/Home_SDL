@@ -12,7 +12,6 @@ with Home_SDL.Colors;
 
 procedure Test_Texture is
 
-   Window : Home_SDL.Windows.SDL_Window;
 
    procedure Render
      (Renderer : Home_SDL.Renderers.SDL_Renderer;
@@ -20,6 +19,8 @@ procedure Test_Texture is
       use Home_SDL.Renderers;
       use Home_SDL.Colors;
       use Home_SDL.Textures;
+      use Home_SDL.Drawings;
+      R : Home_SDL.Geometry.Rectangle_2D;
       Pixmap : aliased Color_RGBA8888_Array := ((255, 255, 255, 255), (0, 0, 0, 255), (0, 0, 0, 255), (255, 255, 255, 255));
    begin
       Update (Texture, Pixmap'Address, 2 * 4);
@@ -27,77 +28,75 @@ procedure Test_Texture is
       --Set_Color (Renderer, (255, 200, 100, 0));
       --Clear (Renderer);
       --Set_Color (Renderer, (15, 200, 100, 0));
-      --R.X := 100;
-      --R.X := 200;
-      --R.W := 100;
-      --R.H := 200;
-      --Draw_Rectangle (Renderer, R);
+      R.X := 100;
+      R.X := 200;
+      R.W := 100;
+      R.H := 200;
+      Draw_Rectangle (Renderer, R);
       --Set_Render_Target (Renderer, Null_Texture);
       Render_Copy (Renderer, Texture);
    end;
+
+
+   procedure Main_Loop
+     (Renderer : Home_SDL.Renderers.SDL_Renderer;
+      Texture : Home_SDL.Textures.SDL_Texture;
+      Should_Run : in out Boolean) is
+      use Home_SDL.Renderers;
+      use Home_SDL.Events;
+      use Home_SDL.Events_Kind;
+      use Ada.Text_IO;
+      Event : SDL_Event;
+      Flag : Integer;
+   begin
+
+      loop
+         Flag := Poll (Event);
+         exit when Flag = 0;
+         case Event.Kind is
+            when SDL_QUIT =>
+               Put_Line ("[Event] SDL_QUIT");
+               Should_Run := False;
+               exit;
+            when others =>
+               null;
+         end case;
+      end loop;
+      Render (Renderer, Texture);
+      Present (Renderer);
+   end Main_Loop;
+
 
 begin
 
    Home_SDL.Initialize (Home_SDL.Initialize_Flags.Video);
 
-
-
    declare
-      use Ada.Text_IO;
-      use Home_SDL;
-      use Home_SDL.Windows;
-      use type Home_SDL.Windows.Window_Flags.Flag_Field;
-   begin
-      Put_Line ("Create SDL Window");
-      Window := Windows.Create ("Title", 0, 0, 500, 500, True, True, 0, Window_Flags.Shown or Window_Flags.Resizable);
-   end;
-
-   declare
-      use Ada.Text_IO;
       use Home_SDL;
       use Home_SDL.Renderers;
-      use Home_SDL.Events;
-      use Home_SDL.Events_Kind;
       use Home_SDL.Textures;
-      use Home_SDL.Drawings;
+      use Home_SDL.Windows;
+      use Ada.Text_IO;
+      use type Home_SDL.Windows.Window_Flags.Flag_Field;
+      Window : Home_SDL.Windows.SDL_Window;
       Renderer : SDL_Renderer;
-      Event : SDL_Event;
-      Should_Run : Boolean := True;
       R : Geometry.Rectangle_2D;
       Texture : SDL_Texture;
+      Should_Run : Boolean := True;
    begin
+      Window := Windows.Create ("Title", 0, 0, 500, 500, True, True, 0, Window_Flags.Shown or Window_Flags.Resizable);
       Windows.Get_Rectangle (Window, R);
       Renderer := Renderers.Create (Window, Renderer_Flags.Software);
       Texture := Textures.Create (Renderer, Textures.ARGB8888, Textures.Target, 2, 2);
-
       while Should_Run loop
-         while Home_SDL.Events.Poll (Event) = 1 loop
-
-            case Event.Kind is
-
-            when Events_Kind.SDL_QUIT =>
-               Put_Line ("SDL_QUIT");
-               Should_Run := False;
-               exit;
-
-            when others =>
-               null;
-
-            end case;
-
-         end loop;
-
-         Render (Renderer, Texture);
-
-         Present (Renderer);
+         Main_Loop (Renderer, Texture, Should_Run);
+         delay 0.01;
       end loop;
-
-      --delay 1.0;
-      Destroy (Renderer);
+      Textures.Destroy (Texture);
+      Renderers.Destroy (Renderer);
+      Windows.Destroy (Window);
    end;
 
-
-   Home_SDL.Windows.Destroy (Window);
    Home_SDL.Quit;
 
 end Test_Texture;
