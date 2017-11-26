@@ -21,20 +21,25 @@ procedure Test_Texture is
       use Home_SDL.Textures;
       use Home_SDL.Drawings;
       R : Home_SDL.Geometry.Rectangle_2D;
-      Pixmap : aliased Color_RGBA8888_Array := ((255, 255, 255, 255), (0, 0, 0, 255), (0, 0, 0, 255), (255, 255, 255, 255));
+      Pixmap : aliased Color_RGBA8888_Array
+        := (
+            (255, 255, 255, 255), (000, 000, 000, 255),
+            (000, 000, 000, 255), (255, 255, 255, 255)
+           );
    begin
+      Set_Color (Renderer, (255, 200, 100, 0));
+      Clear (Renderer);
       Update (Texture, Pixmap'Address, 2 * 4);
+      Render_Copy (Renderer, Texture);
       --Set_Render_Target (Renderer, Texture);
-      --Set_Color (Renderer, (255, 200, 100, 0));
-      --Clear (Renderer);
       --Set_Color (Renderer, (15, 200, 100, 0));
+      --Set_Render_Target (Renderer, Null_Texture);
       R.X := 100;
-      R.X := 200;
+      R.Y := 200;
       R.W := 100;
       R.H := 200;
-      Draw_Rectangle (Renderer, R);
-      --Set_Render_Target (Renderer, Null_Texture);
-      Render_Copy (Renderer, Texture);
+      Set_Color (Renderer, (15, 200, 100, 255));
+      Fill_Rectangle (Renderer, R);
    end;
 
 
