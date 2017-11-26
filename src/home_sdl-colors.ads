@@ -2,11 +2,13 @@ package Home_SDL.Colors is
 
    type Color_8 is new Interfaces.Unsigned_8;
 
-   type Color_RGBA is record
+   type Color_RGBA8888 is record
       R : Color_8;
       G : Color_8;
       B : Color_8;
       A : Color_8;
    end record;
+
+   type Color_RGBA8888_Array is array (Integer range <>) of Color_RGBA8888;
 
 end Home_SDL.Colors;

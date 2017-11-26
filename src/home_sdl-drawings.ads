@@ -20,7 +20,7 @@ package Home_SDL.Drawings is
      Pre => Renderer /= Null_Renderer;
    -- Use this function to set the color used for drawing operations (Rect, Line and Clear).
 
-   procedure Set_Color (Renderer : SDL_Renderer; Color : Colors.Color_RGBA);
+   procedure Set_Color (Renderer : SDL_Renderer; Color : Colors.Color_RGBA8888);
 
    function Draw_Line (Renderer : SDL_Renderer; X1, Y1, X2, Y2 : Geometry.Integer_Element) return Draw_Result with
      Import        => True,
@@ -48,12 +48,18 @@ package Home_SDL.Drawings is
    function Draw_Rectangle (Renderer : SDL_Renderer; Rectangle : Geometry.Rectangle_2D) return Draw_Result with
      Import        => True,
      Convention    => C,
-     External_Name => "SDL_RenderFillRect",
+     External_Name => "SDL_RenderDrawRect",
      Pre           => Renderer /= Null_Renderer;
 
    procedure Draw_Rectangle (Renderer : SDL_Renderer; Rectangle : Geometry.Rectangle_2D);
 
+   function Fill_Rectangle (Renderer : SDL_Renderer; Rectangle : Geometry.Rectangle_2D) return Draw_Result with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_RenderFillRect",
+     Pre           => Renderer /= Null_Renderer;
 
+   procedure Fill_Rectangle (Renderer : SDL_Renderer; Rectangle : Geometry.Rectangle_2D);
 
 
 end Home_SDL.Drawings;

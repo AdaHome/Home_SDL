@@ -35,7 +35,15 @@ package body Home_SDL.Drawings is
       Assert (Result = 0, "SDL_RenderFillRect. " & Errors.Get);
    end;
 
-   procedure Set_Color (Renderer : SDL_Renderer; Color : Colors.Color_RGBA) is
+   procedure Fill_Rectangle (Renderer : SDL_Renderer; Rectangle : Geometry.Rectangle_2D) is
+      use Ada.Assertions;
+      Result : Draw_Result;
+   begin
+      Result := Fill_Rectangle (Renderer, Rectangle);
+      Assert (Result = 0, "SDL_RenderFillRect. " & Errors.Get);
+   end;
+
+   procedure Set_Color (Renderer : SDL_Renderer; Color : Colors.Color_RGBA8888) is
    begin
       Set_Color (Renderer, Color.R, Color.G, Color.B, Color.A);
    end;

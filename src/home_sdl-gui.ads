@@ -7,19 +7,19 @@ package Home_SDL.GUI is
    use Home_SDL;
 
    type Basic_State is (Normal, Hoover, Active);
-   type Background_Color_Mode is array (Basic_State) of Colors.Color_RGBA;
+   type Background_Color_Mode is array (Basic_State) of Colors.Color_RGBA8888;
 
 
    type Basic_Background is record
-      Normal : Colors.Color_RGBA;
-      Hoover : Colors.Color_RGBA;
-      Active : Colors.Color_RGBA;
-      Toggle : Colors.Color_RGBA;
+      Normal : Colors.Color_RGBA8888;
+      Hoover : Colors.Color_RGBA8888;
+      Active : Colors.Color_RGBA8888;
+      Toggle : Colors.Color_RGBA8888;
    end record;
 
    type Basic_Element is record
       Rectangle : Geometry.Rectangle_2D;
-      Border_Color : Colors.Color_RGBA;
+      Border_Color : Colors.Color_RGBA8888;
       Background : Basic_Background;
       Border : Boolean := False;
       Hoover : Boolean := False;

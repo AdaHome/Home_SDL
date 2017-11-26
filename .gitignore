@@ -1,13 +1,13 @@
 # Blacklist
-/*
-
-
+*
 
 # Whitelist
+!*/
 !.gitignore
-!src
-!src_test
 !*.adb
 !*.ads
 !*.gpr
-!*.md
+!*.md 
+
+# Blacklist
+obj
