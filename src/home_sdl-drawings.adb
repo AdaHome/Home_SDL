@@ -11,11 +11,11 @@ package body Home_SDL.Drawings is
       Assert (Result = 0, "SDL_RenderDrawLine. " & Errors.Get);
    end Draw_Line;
 
-   procedure Draw_Line_Array (Renderer : SDL_Renderer; Data : Geometry.Point_Array; Count : Geometry.Element_Count) is
+   procedure Draw_Line_Array (Renderer : SDL_Renderer; Data : Geometry.Point_2D_Array) is
       use Ada.Assertions;
       Result : Draw_Result;
    begin
-      Result := Draw_Line_Array (Renderer, Data, Count);
+      Result := Draw_Line_Array (Renderer, Data, Data'Length);
       Assert (Result = 0, "SDL_RenderDrawLine. " & Errors.Get);
    end Draw_Line_Array;
 

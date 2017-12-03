@@ -1,14 +1,12 @@
-with Ada.Text_IO;
-
 with Home_SDL;
 with Home_SDL.Windows;
 with Home_SDL.Renderers;
-with Home_SDL.Events;
-with Home_SDL.Events_Kind;
 with Home_SDL.Geometry;
 with Home_SDL.Textures;
 with Home_SDL.Drawings;
 with Home_SDL.Colors;
+
+with Basic_Event_Loop;
 
 procedure Test_Texture is
 
@@ -31,19 +29,16 @@ procedure Test_Texture is
    -- X0X0X
    -- 0X0X0
 
-
    procedure Update is new Home_SDL.Textures.Generic_Update
      (Integer,
       Home_SDL.Colors.Color_RGBA8888,
       Home_SDL.Colors.Color_RGBA8888_Array2);
-
 
    Pixmap : constant Home_SDL.Colors.Color_RGBA8888_Array2 (1 .. 2, 1 .. 3) :=
      (
       ((255, 000, 000, 255), (000, 255, 000, 255), (000, 000, 255, 255)),
       ((000, 000, 000, 255), (050, 050, 050, 255), (100, 100, 100, 255))
      );
-
 
    procedure Render
      (Renderer : Home_SDL.Renderers.SDL_Renderer;
@@ -69,59 +64,28 @@ procedure Test_Texture is
       Render_Copy (Renderer, Texture);
    end;
 
-
-   procedure Main_Loop
-     (Renderer : Home_SDL.Renderers.SDL_Renderer;
-      Texture : Home_SDL.Textures.SDL_Texture;
-      Should_Run : in out Boolean) is
-      use Home_SDL.Renderers;
-      use Home_SDL.Events;
-      use Home_SDL.Events_Kind;
-      use Ada.Text_IO;
-      Event : SDL_Event;
-      Flag : Integer;
-   begin
-
-      loop
-         Flag := Poll (Event);
-         exit when Flag = 0;
-         case Event.Kind is
-            when SDL_QUIT =>
-               Put_Line ("[Event] SDL_QUIT");
-               Should_Run := False;
-               exit;
-            when others =>
-               null;
-         end case;
-      end loop;
-      Render (Renderer, Texture);
-      Present (Renderer);
-   end Main_Loop;
-
-
 begin
 
    Home_SDL.Initialize (Home_SDL.Initialize_Flags.Video);
 
    declare
       use Home_SDL;
-      use Home_SDL.Renderers;
-      use Home_SDL.Textures;
-      use Home_SDL.Windows;
-      use Ada.Text_IO;
-      use type Home_SDL.Windows.Window_Flags.Flag_Field;
+      use Home_SDL.Windows.Window_Flags;
+      use Home_SDL.Renderers.Renderer_Flags;
       Window : Home_SDL.Windows.SDL_Window;
-      Renderer : SDL_Renderer;
+      Renderer : Renderers.SDL_Renderer;
       R : Geometry.Rectangle_2D;
-      Texture : SDL_Texture;
+      Texture : Textures.SDL_Texture;
       Should_Run : Boolean := True;
    begin
-      Window := Windows.Create ("Title", 0, 0, 500, 500, True, True, 0, Window_Flags.Shown or Window_Flags.Resizable);
+      Window := Windows.Create ("Title", 0, 0, 500, 500, True, True, 0, Shown or Resizable);
       Windows.Get_Rectangle (Window, R);
-      Renderer := Renderers.Create (Window, Renderer_Flags.Software);
+      Renderer := Renderers.Create (Window, Software);
       Texture := Textures.Create (Renderer, Textures.ABGR8888, Textures.Target, Pixmap'Length (2), Pixmap'Length (1));
       while Should_Run loop
-         Main_Loop (Renderer, Texture, Should_Run);
+         Basic_Event_Loop (Should_Run);
+         Render (Renderer, Texture);
+         Renderers.Present (Renderer);
          delay 0.01;
       end loop;
       Textures.Destroy (Texture);

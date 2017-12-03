@@ -61,12 +61,6 @@ package Home_SDL.Renderers is
      External_Name => "SDL_RenderPresent",
      Pre           => Renderer /= Null_Renderer;
 
-   procedure Clear (Renderer : SDL_Renderer) with
-     Import        => True,
-     Convention    => C,
-     External_Name => "SDL_RenderClear",
-     Pre           => Renderer /= Null_Renderer;
-
    procedure Destroy (Renderer : SDL_Renderer) with
      Import        => True,
      Convention    => C,

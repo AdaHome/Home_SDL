@@ -1,89 +1,28 @@
-with Ada.Text_IO;
 with Home_SDL;
-
-
 with Home_SDL.Windows;
-with Home_SDL.Renderers;
-with Home_SDL.Geometry;
-with Home_SDL.Drawings;
-with Home_SDL.Events;
-with Home_SDL.Events_Kind;
 
+with Basic_Event_Loop;
 
 procedure Test_Window is
-
-   Window : Home_SDL.Windows.SDL_Window;
-
 begin
 
+   Home_SDL.Initialize (Home_SDL.Initialize_Flags.Video);
 
    declare
-      use Ada.Text_IO;
-      use Home_SDL.Initialize_Flags;
-   begin
-      Put_Line ("Initialize SDL");
-      Home_SDL.Initialize (Video);
-   end;
-
-
-   declare
-      use Ada.Text_IO;
       use Home_SDL;
       use Home_SDL.Windows;
-      use type Home_SDL.Windows.Window_Flags.Flag_Field;
-   begin
-      Put_Line ("Create SDL Window");
-      Window := Create ("Title", 0, 0, 500, 500, True, True, 0, Window_Flags.Shown or Window_Flags.Resizable);
-   end;
-
-
-   declare
-      use Ada.Text_IO;
-      use Home_SDL;
-      use Home_SDL.Renderers;
-      use Home_SDL.Geometry;
-      use Home_SDL.Drawings;
-      use Home_SDL.Events;
-      use Home_SDL.Events_Kind;
-      Renderer : SDL_Renderer;
-      Rectangle : constant Rectangle_2D := (100, 100, 100, 100);
-      Event : SDL_Event;
+      use Home_SDL.Windows.Window_Flags;
+      Window : Home_SDL.Windows.SDL_Window;
       Should_Run : Boolean := True;
    begin
-      Renderer := Create (Window, Renderer_Flags.Software);
+      Window := Windows.Create ("Title", 0, 0, 500, 500, True, True, 0, Shown or Resizable);
       while Should_Run loop
-         pragma Warnings (Off);
-         while Poll (Event) = 1 loop
-            pragma Warnings (On);
-            case Event.Kind is
-               when SDL_QUIT =>
-                  Put_Line ("SDL_QUIT");
-                  Should_Run := False;
-               when others =>
-                  Put_Line ("Event : " & Event.Kind'Image);
-            end case;
-         end loop;
-
-         Set_Color (Renderer, 0, 0, 0, 255);
-         Clear (Renderer);
-
-         Set_Color (Renderer, 0, 0, 255, 255);
-         Draw_Rectangle (Renderer, Rectangle);
-
-         Present (Renderer);
+         Basic_Event_Loop (Should_Run);
+         delay 0.01;
       end loop;
-      Destroy (Renderer);
+      Windows.Destroy (Window);
    end;
 
-
-   declare
-      use Ada.Text_IO;
-      use Home_SDL.Windows;
-   begin
-      Destroy (Window);
-      Put_Line ("Quit SDL");
-      Home_SDL.Quit;
-   end;
-
+   Home_SDL.Quit;
 
 end Test_Window;

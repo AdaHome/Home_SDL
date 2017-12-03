@@ -1,21 +1,20 @@
 with Home_SDL;
 with Home_SDL.Windows;
 with Home_SDL.Renderers;
-with Home_SDL.Geometry;
+with Home_SDL.Drawings;
 
 with Basic_Event_Loop;
-with Basic_Plotters;
 
-procedure Test_Plotter is
-
-   Plot : Basic_Plotters.Simple_Plot := (Rectangle => (10, 10, 10, 10), others => <>);
+procedure Test_Renderer is
 
    procedure Render
      (Renderer : Home_SDL.Renderers.SDL_Renderer) is
       use Home_SDL;
-      Data : Geometry.Point_2D_Array := ((0, 0), (10, 10), (20, 10));
    begin
-      Basic_Plotters.Draw (Renderer, Plot, Data);
+      Drawings.Set_Color (Renderer, (0, 0, 0, 255));
+      Drawings.Clear (Renderer);
+      Drawings.Set_Color (Renderer, (255, 255, 255, 255));
+      Drawings.Fill_Rectangle (Renderer, (10, 10, 10, 10));
    end;
 
 begin
@@ -44,4 +43,4 @@ begin
 
    Home_SDL.Quit;
 
-end Test_Plotter;
+end Test_Renderer;

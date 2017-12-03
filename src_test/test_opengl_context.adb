@@ -1,10 +1,8 @@
-with Ada.Text_IO;
-
 with Home_SDL;
 with Home_SDL.Windows;
-with Home_SDL.Events;
-with Home_SDL.Events_Kind;
 with Home_SDL.Errors;
+
+with Basic_Event_Loop;
 
 procedure Test_OpenGL_Context is
 
@@ -13,27 +11,6 @@ procedure Test_OpenGL_Context is
    begin
       null;
    end Render;
-
-   procedure Event_Loop (Should_Run : in out Boolean) is
-      use Ada.Text_IO;
-      use Home_SDL.Events;
-      use Home_SDL.Events_Kind;
-      Event : SDL_Event;
-      Flag : Integer;
-   begin
-      loop
-         Flag := Poll (Event);
-         exit when Flag = 0;
-         case Event.Kind is
-            when SDL_QUIT =>
-               Put_Line ("[Event] SDL_QUIT");
-               Should_Run := False;
-               exit;
-            when others =>
-               null;
-         end case;
-      end loop;
-   end Event_Loop;
 
 
 begin
@@ -50,7 +27,7 @@ begin
       Window := Windows.Create ("Title", 0, 0, 500, 500, True, True, 0, Shown or Resizable or OpenGL);
       GL_Context := Windows.Create_OpenGL_Context (Window);
       while Should_Run loop
-         Event_Loop (Should_Run);
+         Basic_Event_Loop (Should_Run);
          Render (Window);
          Windows.Swap (Window);
          delay 0.01;

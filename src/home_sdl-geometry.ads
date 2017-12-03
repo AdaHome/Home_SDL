@@ -17,9 +17,9 @@ package Home_SDL.Geometry is
 
    type Integer_Array is array (Element_Count range <>) of aliased Integer_Element with Convention => C;
 
-   type Point_Array is array (Element_Count range <>) of aliased Point_2D with Convention => C;
+   type Point_2D_Array is array (Element_Count range <>) of aliased Point_2D with Convention => C;
 
-   type Rectangle_Array is array (Element_Count range <>) of aliased Rectangle_2D with Convention => C;
+   type Rectangle_2D_Array is array (Element_Count range <>) of aliased Rectangle_2D with Convention => C;
 
    function XY_In_Rectangle (X : Integer_Element; Y : Integer_Element; R : Rectangle_2D) return Boolean;
 
