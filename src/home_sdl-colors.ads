@@ -9,6 +9,7 @@ package Home_SDL.Colors is
       A : Color_8;
    end record;
 
-   type Color_RGBA8888_Array is array (Integer range <>) of Color_RGBA8888;
+   type Color_RGBA8888_Array1 is array (Integer range <>) of Color_RGBA8888;
+   type Color_RGBA8888_Array2 is array (Integer range <>, Integer range <>) of Color_RGBA8888;
 
 end Home_SDL.Colors;

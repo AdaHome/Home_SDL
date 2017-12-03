@@ -12,6 +12,38 @@ with Home_SDL.Colors;
 
 procedure Test_Texture is
 
+   procedure Chess
+     (Pixmap : out Home_SDL.Colors.Color_RGBA8888_Array2) is
+      use Home_SDL.Colors;
+      Black : constant Color_RGBA8888 := (000, 000, 000, 255);
+      White : constant Color_RGBA8888 := (255, 255, 255, 255);
+      A : Boolean := True;
+   begin
+      for I in Pixmap'Range (1) loop
+         A := not A;
+         for J in Pixmap'Range (2) loop
+            A := not A;
+            Pixmap (I, J) := (if A then White else Black);
+         end loop;
+      end loop;
+   end Chess;
+   pragma Unreferenced (Chess);
+   -- X0X0X
+   -- 0X0X0
+
+
+   procedure Update is new Home_SDL.Textures.Generic_Update
+     (Integer,
+      Home_SDL.Colors.Color_RGBA8888,
+      Home_SDL.Colors.Color_RGBA8888_Array2);
+
+
+   Pixmap : constant Home_SDL.Colors.Color_RGBA8888_Array2 (1 .. 2, 1 .. 3) :=
+     (
+      ((255, 000, 000, 255), (000, 255, 000, 255), (000, 000, 255, 255)),
+      ((000, 000, 000, 255), (050, 050, 050, 255), (100, 100, 100, 255))
+     );
+
 
    procedure Render
      (Renderer : Home_SDL.Renderers.SDL_Renderer;
@@ -21,25 +53,20 @@ procedure Test_Texture is
       use Home_SDL.Textures;
       use Home_SDL.Drawings;
       R : Home_SDL.Geometry.Rectangle_2D;
-      Pixmap : aliased Color_RGBA8888_Array
-        := (
-            (255, 255, 255, 255), (000, 000, 000, 255),
-            (000, 000, 000, 255), (255, 255, 255, 255)
-           );
    begin
+      --Chess (Pixmap);
       Set_Color (Renderer, (255, 200, 100, 0));
       Clear (Renderer);
-      Update (Texture, Pixmap'Address, 2 * 4);
-      Render_Copy (Renderer, Texture);
-      --Set_Render_Target (Renderer, Texture);
-      --Set_Color (Renderer, (15, 200, 100, 0));
-      --Set_Render_Target (Renderer, Null_Texture);
-      R.X := 100;
-      R.Y := 200;
-      R.W := 100;
-      R.H := 200;
+      Update (Texture, null, Pixmap);
+      Set_Render_Target (Renderer, Texture);
+      R.X := 1;
+      R.Y := 5;
+      R.W := 1;
+      R.H := 5;
       Set_Color (Renderer, (15, 200, 100, 255));
       Fill_Rectangle (Renderer, R);
+      Set_Render_Target (Renderer, Null_Texture);
+      Render_Copy (Renderer, Texture);
    end;
 
 
@@ -92,7 +119,7 @@ begin
       Window := Windows.Create ("Title", 0, 0, 500, 500, True, True, 0, Window_Flags.Shown or Window_Flags.Resizable);
       Windows.Get_Rectangle (Window, R);
       Renderer := Renderers.Create (Window, Renderer_Flags.Software);
-      Texture := Textures.Create (Renderer, Textures.ARGB8888, Textures.Target, 2, 2);
+      Texture := Textures.Create (Renderer, Textures.ABGR8888, Textures.Target, Pixmap'Length (2), Pixmap'Length (1));
       while Should_Run loop
          Main_Loop (Renderer, Texture, Should_Run);
          delay 0.01;

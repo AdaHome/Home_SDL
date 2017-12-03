@@ -42,9 +42,6 @@ package Home_SDL.Drawings is
    procedure Draw_Line_Array (Renderer : SDL_Renderer; Data : Geometry.Point_Array; Count : Geometry.Element_Count);
 
 
-
-   --  int SDL_RenderFillRect(SDL_Renderer*   renderer,
-   --                         const SDL_Rect* rect)
    function Draw_Rectangle (Renderer : SDL_Renderer; Rectangle : Geometry.Rectangle_2D) return Draw_Result with
      Import        => True,
      Convention    => C,

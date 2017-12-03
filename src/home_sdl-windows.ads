@@ -33,6 +33,11 @@ package Home_SDL.Windows is
    Null_SDL_Window : constant SDL_Window;
 
 
+   type OpenGL_Context is private;
+   Null_OpenGL_Context : constant OpenGL_Context;
+
+
+
    package Window_Flags is
 
       type Flag_Field is mod 2 ** 32 with Convention => C;
@@ -166,7 +171,6 @@ package Home_SDL.Windows is
      Pre           => Window /= Null_SDL_Window;
 
 
-   --int SDL_UpdateWindowSurface(SDL_Window* window)
    function Update_Surface (Window : SDL_Window) return Integer with
      Import        => True,
      Convention    => C,
@@ -192,6 +196,31 @@ package Home_SDL.Windows is
       Rectangle : out Geometry.Rectangle_2D);
 
 
+   function Create_OpenGL_Context
+     (Window : SDL_Window) return OpenGL_Context with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_GL_CreateContext",
+     Pre           => Window /= Null_SDL_Window,
+     Post          => Create_OpenGL_Context'Result /= Null_OpenGL_Context;
+
+
+   procedure Delete_OpenGL_Context
+     (Context : OpenGL_Context) with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_GL_DeleteContext",
+     Pre           => Context /= Null_OpenGL_Context;
+
+
+   procedure Swap
+     (Window : SDL_Window) with
+     Import        => True,
+     Convention    => C,
+     External_Name => "SDL_GL_SwapWindow",
+     Pre           => Window /= Null_SDL_Window;
+
+
 private
 
 
@@ -200,6 +229,10 @@ private
 
    type SDL_Window is new System.Address;
    Null_SDL_Window : constant SDL_Window := SDL_Window (System.Null_Address);
+
+
+   type OpenGL_Context is new System.Address;
+   Null_OpenGL_Context : constant OpenGL_Context := OpenGL_Context (System.Null_Address);
 
 
 end Home_SDL.Windows;

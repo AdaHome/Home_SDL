@@ -4,15 +4,19 @@ with System;
 
 package Home_SDL.Textures is
 
+
    type Texture_Kind is (Static, Streaming, Target) with
      Convention => C;
 
-   type SDL_Texture is private;
 
+   type SDL_Texture is private;
    Null_Texture : constant SDL_Texture;
+
 
    type Texture_Width is new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
    type Texture_Height is new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
+   type Texture_Pitch8 is new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
+
 
    type Texture_Format is
      (
@@ -55,41 +59,45 @@ package Home_SDL.Textures is
       UYVY
      );
 
+
    subtype Source_Rectangle is Geometry.Rectangle_2D;
    subtype Destination_Rectangle is Geometry.Rectangle_2D;
 
-   type Pitch8 is new Interfaces.C.int;
 
    function Set_Render_Target
      (Renderer : in Renderers.SDL_Renderer;
-      Texture  : in SDL_Texture) return Integer with
+      Texture  : in SDL_Texture) return SDL_Result with
      Import => True,
      Convention => C,
      External_Name => "SDL_SetRenderTarget";
+
 
    procedure Set_Render_Target
      (Renderer : in Renderers.SDL_Renderer;
       Texture  : in SDL_Texture);
 
+
    function Render_Copy
      (Renderer    : in Renderers.SDL_Renderer;
       Texture     : in SDL_Texture;
       Source      : access Source_Rectangle;
-      Destination : access Destination_Rectangle) return Integer with
+      Destination : access Destination_Rectangle) return SDL_Result with
      Import => True,
      Convention => C,
      External_Name => "SDL_RenderCopy";
+
 
    procedure Render_Copy
      (Renderer    : in Renderers.SDL_Renderer;
       Texture     : in SDL_Texture);
 
+
    function Create
      (Renderer : in Renderers.SDL_Renderer;
       Format   : in Texture_Format;
       Kind     : in Texture_Kind;
-      Width    : Texture_Width;
-      Height   : Texture_Height) return SDL_Texture with
+      Width    : in Texture_Width;
+      Height   : in Texture_Height) return SDL_Texture with
      Import        => True,
      Convention    => C,
      External_Name => "SDL_CreateTexture";
@@ -98,16 +106,34 @@ package Home_SDL.Textures is
    function Update
      (Texture : in SDL_Texture;
       Format  : access Geometry.Rectangle_2D;
-      Data    : System.Address;
-      Pitch   : Pitch8) return Interfaces.C.int with
+      Data    : in System.Address;
+      Pitch   : in Texture_Pitch8) return SDL_Result with
      Import        => True,
      Convention    => C,
      External_Name => "SDL_UpdateTexture";
 
+
    procedure Update
      (Texture : in SDL_Texture;
-      Data    : System.Address;
-      Pitch   : Pitch8);
+      Format  : access Geometry.Rectangle_2D;
+      Data    : in System.Address;
+      Pitch   : in Texture_Pitch8);
+
+
+   procedure Update
+     (Texture : in SDL_Texture;
+      Data    : in System.Address;
+      Pitch   : in Texture_Pitch8);
+
+
+   generic
+      type Index is range <>;
+      type Element is private;
+      type Pixmap is array (Index range <>, Index range <>) of Element;
+   procedure Generic_Update
+     (Texture : in SDL_Texture;
+      Format  : access Geometry.Rectangle_2D;
+      Data    : in Pixmap);
 
 
    procedure Destroy

@@ -8,10 +8,10 @@ package body Home_SDL.Textures is
      (Renderer : in Renderers.SDL_Renderer;
       Texture  : in SDL_Texture) is
       use Ada.Assertions;
-      I : Integer;
+      Result : SDL_Result;
    begin
-      I := Set_Render_Target (Renderer, Texture);
-      Assert (I = 0, "Create() : " & Errors.Get);
+      Result := Set_Render_Target (Renderer, Texture);
+      Assert (Result = 0, "Create() : " & Errors.Get);
    end;
 
 
@@ -19,23 +19,45 @@ package body Home_SDL.Textures is
      (Renderer    : in Renderers.SDL_Renderer;
       Texture     : in SDL_Texture) is
       use Ada.Assertions;
-      I : Integer;
+      Result : SDL_Result;
    begin
-      I := Render_Copy (Renderer, Texture, null, null);
-      Assert (I = 0, "Update() : " & Errors.Get);
+      Result := Render_Copy (Renderer, Texture, null, null);
+      Assert (Result = 0, "Update() : " & Errors.Get);
    end;
 
 
    procedure Update
      (Texture : in SDL_Texture;
       Data    : System.Address;
-      Pitch   : Pitch8) is
+      Pitch   : Texture_Pitch8) is
       use Ada.Assertions;
-      use type Interfaces.C.int;
-      I : Interfaces.C.int;
+      Result : SDL_Result;
    begin
-      I := Update (Texture, null, Data, Pitch);
-      Assert (I = 0, "Update() : " & Errors.Get);
+      Result := Update (Texture, null, Data, Pitch);
+      Assert (Result = 0, "Update() : " & Errors.Get);
    end;
+
+
+   procedure Update
+     (Texture : in SDL_Texture;
+      Format  : access Geometry.Rectangle_2D;
+      Data    : System.Address;
+      Pitch   : Texture_Pitch8) is
+      use Ada.Assertions;
+      Result : SDL_Result;
+   begin
+      Result := Update (Texture, Format, Data, Pitch);
+      Assert (Result = 0, "Update() : " & Errors.Get);
+   end;
+
+
+   procedure Generic_Update
+     (Texture : in SDL_Texture;
+      Format  : access Geometry.Rectangle_2D;
+      Data    : in Pixmap) is
+   begin
+      Update (Texture, Format, Data'Address, Data'Length (2) * (Element'Size / Standard'Storage_Unit));
+   end;
+
 
 end Home_SDL.Textures;

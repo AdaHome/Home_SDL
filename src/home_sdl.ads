@@ -3,6 +3,7 @@ with Interfaces.C;
 package Home_SDL is
 
    type Initialize_Result is new Interfaces.C.int;
+   type SDL_Result is new Interfaces.C.int;
 
    package Initialize_Flags is
       type Flag_Field is private;
