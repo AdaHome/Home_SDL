@@ -2,7 +2,7 @@ with Home_SDL.Geometry;
 with Home_SDL.Colors;
 with Home_SDL.Renderers;
 
-package Home_SDL.GUI is
+package Basic_GUI is
 
    use Home_SDL;
 
@@ -28,8 +28,13 @@ package Home_SDL.GUI is
    end record;
 
 
+   type Basic_Element_Array is array (Integer range <>) of Basic_Element;
+
    procedure Render (Renderer : Renderers.SDL_Renderer; Element : Basic_Element);
+   procedure Render (Renderer : Renderers.SDL_Renderer; Element_Array : Basic_Element_Array);
+
    procedure Update (Element : in out Basic_Element; Point : Geometry.Point_2D; B : Integer);
+   procedure Update (Element_Array : in out Basic_Element_Array; Point : Geometry.Point_2D; B : Integer);
 
 
-end Home_SDL.GUI;
+end Basic_GUI;

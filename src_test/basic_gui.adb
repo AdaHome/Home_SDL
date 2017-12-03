@@ -1,6 +1,6 @@
 with Home_SDL.Drawings;
 
-package body Home_SDL.GUI is
+package body Basic_GUI is
 
 
    procedure Render (Renderer : Renderers.SDL_Renderer; Element : Basic_Element) is
@@ -34,4 +34,20 @@ package body Home_SDL.GUI is
    end;
 
 
-end Home_SDL.GUI;
+   procedure Update (Element_Array : in out Basic_Element_Array; Point : Geometry.Point_2D; B : Integer) is
+   begin
+      for E of Element_Array loop
+         Update (E, Point, B);
+      end loop;
+   end;
+
+
+   procedure Render (Renderer : Renderers.SDL_Renderer; Element_Array : Basic_Element_Array) is
+   begin
+      for E of Element_Array loop
+         Render (Renderer, E);
+      end loop;
+   end;
+
+
+end Basic_GUI;
